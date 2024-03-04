@@ -2,7 +2,8 @@
 title: The Beginner's Guide
 ---
 
-## Introduction {#intro}
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 This page will guide you through the initial setup process of setting up your own free-roam AssettoServer on a Windows machine.  
 We will be setting up our server in a dedicated folder outside of Content Manager, going over how to configure AI traffic, how to use a few settings to customize the server and learning how to troubleshoot some of the more common causes of server crashes.
@@ -12,34 +13,22 @@ We will be setting up our server in a dedicated folder outside of Content Manage
 To follow along you will need the following things:
 
 - The **latest** version of AssettoServer.
-- The **full version** of Content Manager.
-- The **Shutoko Revival Project** track and `fast_lane.ai(p)`.
-- Basic understanding of how text editors work.
+- The **Shutoko Revival Project** track.
+- A `fast_lane.ai(p)` made for **Shutoko Revival Project**.
 
-### Finding the latest version of AssettoServer {#latest-assettoserver-version}
+### Downloading the latest version of AssettoServer {#latest-assettoserver-version}
 
-1. Go to [the latest github release of AssettoServer](https://github.com/compujuckel/AssettoServer/releases/latest).
+1. Go to [the latest github release of AssettoServer.](https://github.com/compujuckel/AssettoServer/releases/latest)
 
-2. Click on the **assetto-server-win-x64.zip** in the Assets section of the release to download the file.
+2. Click on the `assetto-server-win-x64.zip` in the Assets section of the release to download the file.
    
    ![](./assets/guide/asdownload1.png)
-
-### Purchasing the Full Version of Content Manager {#content-manager-fullversion}
-
-:::note
-You can host, configure, and play on the server without the full version of Content Manager. However, for the sake of simplicity, we will be using features of the full version.
-:::
-
-1. Purchase the full version of Content Manager via the [official website](https://assettocorsa.club/content-manager.html) or by being a patron of [x4fabs Patreon](https://www.patreon.com/user?u=11605034).
-
-2. Enter the key you received via email into Content Manager.
-   
-   ![](./assets/guide/cmfull1.png)
 
 ### Downloading the Shutoko Revival Project track and AI spline {#downloading-srp}
 
 :::note
-You can use any track that you have a `fast_lane.ai(p)` for. In this guide, we will use the SRP track as it is one of the most popular tracks.
+You can use any track that you have a `fast_lane.ai(p)` for.  
+In this guide, we will use the SRP track as it is one of the most popular tracks.
 :::
 
 1. Go to the [Shutoko Revival Project Website](https://shutokorevivalproject.com/)
@@ -57,133 +46,262 @@ You can use any track that you have a `fast_lane.ai(p)` for. In this guide, we w
    
    ![](./assets/guide/asdiscord2.png)
 
-## Initial Setup {#initial-setup}
+### Extracting AssettoServer and generating essential files {#server-extraction}
 
-### Preconfiguration {#preconfiguration}
+1. Extract the `assetto-server-win-x64.zip` into a new folder.
 
-For now, we will be using the minimum amount of cars needed for the default traffic settings of AssettoServer.  
-**If we wanted to have more player and/or traffic cars we would adjust steps 4 and 6 accordingly.**  
-These can be adjusted at any point, although doing so before packing the server the first time, means we don't have to edit files ourself, move checksum data or even repack the server and potentially overwrite work we've done.
+2. Start the server by double-clicking `AssettoServer.exe`.
 
-1. Start by navigating to the `Server` tab of Content Manager  
-   If you do not have this Menu enable it in the Content Manager settings like so:
-   
-   ![](./assets/guide/cmconfig1.png)
+You might get the following pop up messages from Windows Firewall or Windows Defender:
 
-2. Click on `SERVER_00` in the list on the left and then on the `SERVER_00` text field to change the name of the server.
-   
-   ![](./assets/guide/cmconfig2.png)
+<Tabs>
+<TabItem value="firewall" label="Windows Firewall" default>
 
-3. Click on the track preview image of Imola and change the track to Shutoko Revival Project - Overload Layout.
-   
-   ![](./assets/guide/cmconfig3.png)
+   ![](./assets/guide/nocmconfig2.png)
 
-4. Move the `Capacity` slider to 11.
-5. Click on the `Admin password` field and enter a password that is at least 8 characters long.
-6. Enable the `Make server public (show on lobby)` checkbox.
-7. Click on the `ENTRY LIST` tab and click on the (+) to add cars to the list.  
-   Add the following cars in this order:
+</TabItem>
+<TabItem value="defender" label="Windows Defender">
 
-   - 1 RUF CTR Yellowbird
-   - 5 Audi S1
-   - 5 Toyota GT-86
+   ![](./assets/guide/nocmconfig1.png)
 
-   ![](./assets/guide/cmconfig4.png)
+</TabItem>
+</Tabs>
+
+After allowing the `AssettoServer.exe` to launch, the server will start, generate all of the files we need for now and then crash.  
+This is expected, close the console if it didn't do so automatically.
+
+## Basic Server configuration {#server-configuration}
+
+### Server Name and Track selection {#name-and-track}
+
+1. Navigate to the `cfg` folder of the server and open the `server_cfg.ini`.
+
+2. Change the `NAME=` parameter to your server's name.
+
+3. Change the `TRACK=` and `CONFIG_TRACK=` parameters to the folder name of the track and layout you want to use.
+
+      - Navigate to `\assettocorsa\content\tracks\` in you local game files.
+      - Search for the track you want to use and copy the name of the track folder to the `TRACK=` parameter.  
+         We will use `shuto_revival_project_beta`.
+      - Open the track folder and copy the name of the layout folder you want to use to the `CONFIG_TRACK=` parameter.  
+         We will use `overload_layout`.
+
+4. Set a `ADMIN_PASSWORD=` that is at least 8 characters long. 
+
+5. Set `REGISTER_TO_LOBBY=` to `1` if you want the server be visible in the online server list.
+
+6. Save and close the file.
+
+<details>
+<summary>Example of how your `server_cfg.ini` should look like:</summary>
+<p>
+
+```ini title="server_cfg.ini"
+[SERVER]
+NAME=AssettoServer Tutorial Server
+CONFIG_TRACK=overload_layout
+TRACK=shuto_revival_project_beta
+SUN_ANGLE=6
+PASSWORD=
+ADMIN_PASSWORD=SecretPassword123
+UDP_PORT=9600
+TCP_PORT=9600
+HTTP_PORT=8081
+CLIENT_SEND_INTERVAL_HZ=20
+FUEL_RATE=0
+DAMAGE_MULTIPLIER=0
+TYRE_WEAR_RATE=0
+ALLOWED_TYRES_OUT=-1
+ABS_ALLOWED=1
+TC_ALLOWED=1
+STABILITY_ALLOWED=0
+AUTOCLUTCH_ALLOWED=0
+TYRE_BLANKETS_ALLOWED=0
+FORCE_VIRTUAL_MIRROR=0
+REGISTER_TO_LOBBY=1
+TIME_OF_DAY_MULT=1
+WELCOME_MESSAGE=welcome.txt
+
+[PRACTICE]
+INFINITE=1
+
+[DYNAMIC_TRACK]
+SESSION_START=95
+
+[WEATHER_0]
+GRAPHICS=3_clear_type=15
+BASE_TEMPERATURE_AMBIENT=18
+BASE_TEMPERATURE_ROAD=24
+VARIATION_AMBIENT=2
+VARIATION_ROAD=1
+WIND_BASE_SPEED_MIN=0
+WIND_BASE_SPEED_MAX=0
+WIND_BASE_DIRECTION=22
+WIND_VARIATION_DIRECTION=0
+```
+
+</p>
+</details>
+
+### Adding Cars {#adding-cars}
+
+1. Navigate to the `cfg` folder of the server and open the `entry_list.ini`.
+
+2. Copy the existing entries and iterate the `[CAR_X]` until you're happy with the ammount of cars. For this guide we will use 11 cars total.
 
    :::caution
-   Only add as many cars to the entry list as there are pits available for the track and layout you've chosen.  
-   The limit is displayed below the `Capacity` slider and for Shutoko Revival Project - Overload Layout looks like this:  
+   Make sure the number of cars you add doesn't exceed the number of pits available for the track and layout you've chosen.  
+   You can find the number of pits a track layout has within the tracks content tab in Content Manager.
 
-   ![](./assets/guide/caution1.png)
+   For the Shutoko Revival Project - Overload Layout it looks like this:
+   ![](./assets/guide/cmpitlimit.png)
 
-   If you go beyond the limit, which is based on the layout of the track you selected, the game will crash when you try to join the server.
+   Adding more cars than available pits will result in the game crashing when trying to join the server.
    :::
 
-8. Click on the `RULES` tab and configure the page how you see fit.
+3. Change the `MODEL=` and `SKIN=` parameters to the folder name of the cars and skins you want to use.
+      - Navigate to the `\assettocorsa\content\cars\` in you local game files.
+      - Search for the car you want to use and copy the name of the track folder to the `MODEL=` parameter.  
+         We will use the following:  
+           - 1x `ruf_yellowbird`  
+           - 5x `ks_audi_a1s1`  
+           - 5x `ks_toyota_gt86`  
+      - Open the car folder and copy the name of the skin folder you want to use to the `SKIN=` parameter.  
+         We will use the following:  
+           - The `03_black` skin for the `ruf_yellowbird`.  
+           - The `00_sepang_blue_pearl_effect_br` skin for the `ks_audi_a1s1`.  
+           - The `0_fusion_orange` skin for the `ks_toyota_gt86`.  
 
-   Some recommendations:
-
-   - Uncheck `Virtual Mirror` as this forces the Virtual Mirror to be on at all times, which can be undesired.
-   - Move the `Allowed tyres out` slider to the left into the `Any` position.
-
-   We will be using the following settings:
-   
-   ![](./assets/guide/cmconfig5.png)
-
-9. Click on the `CONDITIONS` tab and configure the page how you see fit.  
-   Leave the big `Time` and `Time Multiplier` sliders as they are.
-   - In the `Weather` section, flip the switch to `WeatherFX` and select the weather you want.  
-      If the weather you want is not in the list, read [how to change the weather](#changing-weather) after the extracting step.
-   - Click on the 3 little dots next to the weather drop down.
-   - Enable and set the Time/Date/Time multiplier that you want.
-
-   We will be using the following settings:
-   
-   ![](./assets/guide/cmconfig6.png)
-
-10. Click on the `SESSIONS` tab and configure it as follows:
-
-   - Check `Pickup mode` and `Loop mode` while leaving `Locked entry list in pickup mode` unchecked.
-   - Uncheck `Booking`, `Qualifying` and `Race`.
-   - Set `Practice` to something reasonable like 2 hours. You can make sessions longer than that but a length of 999999999 will likely cause problems and is not necessary.
-
-   We will be using the following settings:  
-
-   ![](./assets/guide/cmconfig7.png)
-
-11. At the bottom of the preset, click on `Save`.  
-    
-    ![](./assets/guide/cmconfig8.png)
-
-### Packing the server preset {#preset-packing}
-
-Now that we're done configuring the server, we can use the packing feature to export all files we need into a .zip file for us.
-
-1. In the same bar that we just saved the server preset, click on `Pack`.
-2. Select `Windows` as the target and uncheck `Include executable` and `Pack into single exe-file`.
-3. Click on `Pack` and save it.  
-   
-   ![](./assets/guide/cmpacking1.png)
-
-### Extracting AssettoServer and the packed preset {#server-extraction}
-
-You should now have the following .zip files somewhere:
-
-- `assetto-server-win-x64.zip`
-- The .zip file of the server we just packed
-
-Create a new folder and extract both of these two .zip files into it.
-
-![](./assets/guide/extract1.png)
-
-### First launch and basic AssettoServer traffic configuration {#first-launch-traffic-basics}
-
-Double-click `AssettoServer.exe` to launch the server.  
-If you did everything correctly you should see something along the lines of this:
-
-![](./assets/guide/asconfig1.png)
-
-:::caution
-  You might also have the following error message inside of your log:  
-   ```
-   Your ports are not forwarded correctly. The server will continue to run, but players outside of your network won't be able to join.
-   To fix this, you'll need to go into your router settings and create Port Forwards for these ports:
-   Port 9600 UDP
-   Port 9600 TCP
-   Port 8081 TCP
-   Local IP: XXX.XXX.XXX.XXX
-   Router Page: http://XXX.XXX.XXX.X/
-   Since Instructions are different for each router, search in Google for "how to port forward" with the name of your router and/or ISP.
-   ```
-
-  This means that you need to forward the ports that AssettoServer uses inside your router and possibly make a exception for the `AssettoServer.exe` inside your firewall.  
-
-  Because Instructions are different for each router / ISP, we will not explain how to do this here.  
-  Refer to the user manual of your router or search in Google for "how to port forward" with the name of your router and/or ISP.
+:::note
+For the SRP overload layout, `[CAR_0]` to `[CAR_39]` will spawn at Tatsumi PA, then at Shibaura PA and so on.  
+Keep this in mind when adding more cars than is shown in the guide.
 :::
 
-1. Close the console and navigate to the `cfg` folder inside the server's main folder.
-2. Open the newly created `extra_cfg.yml` using a text editor of your choice and set `EnableAi` to true.  
+4. Save and close the file.
+
+<details>
+<summary>Example of how your `entry_list.ini` should look like:</summary>
+<p>
+
+```ini title="entry_list.ini"
+[CAR_0]
+MODEL=ruf_yellowbird
+SKIN=03_black
+
+[CAR_1]
+MODEL=ks_audi_a1s1
+SKIN=00_sepang_blue_pearl_effect_br
+
+[CAR_2]
+MODEL=ks_audi_a1s1
+SKIN=00_sepang_blue_pearl_effect_br
+
+[CAR_3]
+MODEL=ks_audi_a1s1
+SKIN=00_sepang_blue_pearl_effect_br
+
+[CAR_4]
+MODEL=ks_audi_a1s1
+SKIN=00_sepang_blue_pearl_effect_br
+
+[CAR_5]
+MODEL=ks_audi_a1s1
+SKIN=00_sepang_blue_pearl_effect_br
+
+[CAR_6]
+MODEL=ks_toyota_gt86
+SKIN=0_fusion_orange
+
+[CAR_7]
+MODEL=ks_toyota_gt86
+SKIN=0_fusion_orange
+
+[CAR_8]
+MODEL=ks_toyota_gt86
+SKIN=0_fusion_orange
+
+[CAR_9]
+MODEL=ks_toyota_gt86
+SKIN=0_fusion_orange
+
+[CAR_10]
+MODEL=ks_toyota_gt86
+SKIN=0_fusion_orange
+```
+
+</p>
+</details>
+
+### Adding Checksums {#adding-checksums}
+
+1. Navigate to the main folder of the server and create a folder called `content`.
+
+2. Inside the `content` folder create two folders called `tracks` and `cars`.
+
+   <Tabs>
+   <TabItem value="tracksum" label="Track Checksum" default>
+
+      - Inside the `tracks` folder, create afolder called `shuto_revival_project_beta` and inside of that folder create a folder called `overload_layout`.
+
+      - Navigate to `\assettocorsa\content\tracks\shuto_revival_project_beta` in your local game files.
+
+      - Copy the `models_overload_layout.ini` to the `content\tracks\shuto_revival_project_beta` folder of the server.
+      
+      - Navigate to `\assettocorsa\content\tracks\shuto_revival_project_beta\overload_layout\data` in your local game files.
+      
+      - Copy the `surfaces.ini` to the `content\tracks\shuto_revival_project_beta\overload_layout` folder of the server.
+
+   </TabItem>
+   <TabItem value="carsum" label="Car Checksum">
+
+      - Inside the `car` folder, create a folder for each car.  
+      We will have to create the following folders: `ruf_yellowbird`, `ks_audi_a1s1`, `ks_toyota_gt86`.
+
+      - Navigate to `\assettocorsa\content\cars\` in your local game files.
+      
+      - Open the folder of each car and copy the `data.acd` to their respective `content\cars\` folders of the server.
+
+   </TabItem>
+   </Tabs>
+
+<details>
+<summary>Example of how your server `content` folder should look like:</summary>
+<p>
+
+   ```
+   ├─ 📁content
+   │  ├─ 📁cars
+   │  │  ├─ 📁ks_audi_a1s1
+   │  │  │  ├─ 📄data.acd
+   │  │  ├─ 📁ks_toyota_gt86
+   │  │  │  ├─ 📄data.acd
+   │  │  ├─ 📁ruf_yellowbird
+   │  │  │  ├─ 📄data.acd
+   │  ├─ 📁tracks
+   │  │  ├─ 📁shuto_revival_project_beta
+   │  │  │  ├─ 📁overload_layout
+   │  │  │  │  ├─ 📄surfaces.ini
+   │  │  │  ├─ 📄models_overload_layout.ini
+   ```
+
+</p>
+</details>
+
+   :::caution
+      If the checksum file for cars are missing from your local game files, you will have to either pack the car data yourself using Content Manager or ignore this warning by setting the following parameter in `extra_cfg.yml` to `true`:
+      ```yml title="extra_cfg.yml"
+      IgnoreConfigurationErrors:
+      MissingCarChecksums: true
+      ```
+      Keep in mind that the checksums are required to prevent people from cheating by modifying their car and track data.  
+      Ignore this warning at your own risk.  
+   :::
+
+### Enabling Traffic {#traffic-basics}
+
+1. Navigate to the `cfg` folder inside the server's main folder.
+
+2. Open the `extra_cfg.yml` using a text editor of your choice and set `EnableAi: true`.  
 
    ```yaml title="extra_cfg.yml"
    # Enable AI traffic
@@ -191,49 +309,53 @@ If you did everything correctly you should see something along the lines of this
    ```
 
 3. Save and close the file, then open the `entry_list.ini`.  
-   For the first car, which will be the RUF that we want to drive, we will add a line below `RESTRICTOR=0`.
+   For the first car, which will be the RUF that we want to drive, we will add the following line below `SKIN=`.
 
    ```ini title="entry_list.ini"
    [CAR_0]
    MODEL=ruf_yellowbird
-   SKIN=00_yellowbird_black
-   SPECTATOR_MODE=0
-   DRIVERNAME=
-   TEAM=
-   GUID=
-   BALLAST=0
-   RESTRICTOR=0
+   SKIN=03_black
    AI=none
    ```
 
    For the remaining cars we will add the line `AI=fixed` instead.
 
-4. Save and close the file and then open the `server_cfg.ini`.  
-   Find the `[PRACTICE]` session and add a line with `INFINITE=1` to it.
-
-   ```ini title="server_cfg.ini"
-   [PRACTICE]
-   NAME=Practice
-   TIME=120
-   IS_OPEN=1
-   INFINITE=1
-   ``` 
-
-   This will make the session infinitely long without resetting the session and sending everyone to pits when the 2 hours are up.  
-   Keep in mind that Content Manager and apps will show a `time left`, which is normal and doesn't mean that it's not working.
-
-5. After saving and closing the file, navigate to the content folder of the track, which is `\content\tracks\shuto_revival_project_beta`. Create a new folder called `ai` and place the `fast_lane.aip` we downloaded earlier inside of it.
+4. After saving and closing the file, navigate to the content folder of the track, which is `\content\tracks\shuto_revival_project_beta`. Create a new folder called `ai` and place the `fast_lane.aip` we downloaded earlier inside of it.
    
    ![](./assets/guide/asconfig2.png)
 
-6. Now go back into the main folder of the server and launch `AssettoServer.exe` again.  
+5. Now go back into the main folder of the server and launch `AssettoServer.exe`.  
+   If you did everything correctly you should see something along the lines of this:
+
+![](./assets/guide/asconfig1.png)
+
+   :::caution
+   You might also have the following error message inside of your log:  
+      ```
+      Your ports are not forwarded correctly. The server will continue to run, but players outside of your network won't be able to join.
+      To fix this, you'll need to go into your router settings and create Port Forwards for these ports:
+      Port 9600 UDP
+      Port 9600 TCP
+      Port 8081 TCP
+      Local IP: XXX.XXX.XXX.XXX
+      Router Page: http://XXX.XXX.XXX.X/
+      Since Instructions are different for each router, search in Google for "how to port forward" with the name of your router and/or ISP.
+      ```
+
+   This means that you need to forward the ports that AssettoServer uses inside your router and possibly make a exception for the `AssettoServer.exe` inside your firewall.  
+
+   Because Instructions are different for each router / ISP, we will not explain how to do this here.  
+   Refer to the user manual of your router or search in Google for "how to port forward" with the name of your router and/or ISP.
+   :::
+
    Then open Content Manager and go to the `Drive` tab, select the `Online` tab and then the `LAN` tab.  
    The server will now appear in the server list. It may take a few moments, so you might need to refresh the list a few times.
    
    ![](./assets/guide/asconfig3.png)
 
-7. Select the RUF, click `Join` and drive out of the pits to start spawning AI traffic.
-8. Other people will also be able to join the server by searching for it or via the invite link that you can copy from the console.
+6. Select the RUF, click `Join` and drive out of the pits to start spawning AI traffic.
+
+7. Other people will also be able to join the server by searching for it or via the invite link that you can copy from the console.
    
    :::caution
    Do not click the Invite button to copy the invite link, it will copy your local IP which is useless to people outside of your local network. Use the link that is generated in the console instead.
@@ -243,21 +365,20 @@ If you did everything correctly you should see something along the lines of this
 
 ### Time and Date {#changing-time-date}
 
-We selected time and date settings during the preconfiguration, but what if we wanted to change the time/time multiplier/date without having to pack and extract again?  
-
 1. Navigate to the `cfg` folder of the server and open the `server_cfg.ini` with a text editor of your choice.
+
 2. Find the `GRAPHICS=` parameter in the `[WEATHER_0]` section, it should look something like this:
 
    ```ini title="server_cfg.ini"
    [WEATHER_0]
-   GRAPHICS=sol_03_scattered_clouds_type=17_time=0_mult=0
+   GRAPHICS=3_clear_type=15_time=0_mult=0
    BASE_TEMPERATURE_AMBIENT=18
    BASE_TEMPERATURE_ROAD=6
-   VARIATION_AMBIENT=0
-   VARIATION_ROAD=0
+   VARIATION_AMBIENT=2
+   VARIATION_ROAD=1
    WIND_BASE_SPEED_MIN=0
    WIND_BASE_SPEED_MAX=0
-   WIND_BASE_DIRECTION=0
+   WIND_BASE_DIRECTION=22
    WIND_VARIATION_DIRECTION=0
    ```
    - To change the Time, change the number after `_time=` to the time you want in seconds from 00:00.  
@@ -280,52 +401,50 @@ We selected time and date settings during the preconfiguration, but what if we w
 
    ```ini title="server_cfg.ini"
    [WEATHER_0]
-   GRAPHICS=sol_03_scattered_clouds_type=17_time=64800_mult=0_start=1719700000
+   GRAPHICS=3_clear_type=15_time=64800_mult=0_start=1719700000
    BASE_TEMPERATURE_AMBIENT=18
    BASE_TEMPERATURE_ROAD=6
-   VARIATION_AMBIENT=0
-   VARIATION_ROAD=0
+   VARIATION_AMBIENT=2
+   VARIATION_ROAD=1
    WIND_BASE_SPEED_MIN=0
    WIND_BASE_SPEED_MAX=0
-   WIND_BASE_DIRECTION=0
+   WIND_BASE_DIRECTION=22
    WIND_VARIATION_DIRECTION=0
    ```
    With these settings the server will start at 18:00 on the 30 June 2024 and the time will not progress.
 
 ### Weather {#changing-weather}
-
-We selected a weather during the preconfiguration, but what if we want to change the weather without having to pack and extract again?  
-What if weathers like Heavy Rain are missing from the WeatherFX selection dropdown?
-
-:::caution if you want to select a weather with rain
+ 
+:::caution
 All players will need to have a Custom Shaders Patch preview version installed to see rain.  
 Rain does not come with Sol or Pure. Rain is part of the paid preview versions of Custom Shaders Patch.  
 Purchase Custom Shaders Patch previews on [x4fabs Patreon](https://www.patreon.com/user?u=11605034).
 :::
 
-1. Navigate to the `cfg` folder of the server and open the `server_cfg.ini` with a text editor of your choice.  
+1. Navigate to the `cfg` folder of the server and open the `server_cfg.ini` with a text editor of your choice.
+
 2. Find the `[WEATHER_0]` section, it should look something like this:
 
    ```ini title="server_cfg.ini"
    [WEATHER_0]
-   GRAPHICS=sol_03_scattered_clouds_type=17_time=0_mult=0
+   GRAPHICS=3_clear_type=15_time=0_mult=0
    BASE_TEMPERATURE_AMBIENT=18
    BASE_TEMPERATURE_ROAD=6
-   VARIATION_AMBIENT=0
-   VARIATION_ROAD=0
+   VARIATION_AMBIENT=2
+   VARIATION_ROAD=1
    WIND_BASE_SPEED_MIN=0
    WIND_BASE_SPEED_MAX=0
-   WIND_BASE_DIRECTION=0
+   WIND_BASE_DIRECTION=22
    WIND_VARIATION_DIRECTION=0
    ```
 
 3. Under `[WEATHER_0]` find the parameter `GRAPHICS=` and change the WeatherFX ID after `_type=` to the ID of the weather you want.  
    If you're unsure which ID to use, please check the [list of available WeatherFX type IDs](./misc/wfx-types.md).  
-   For example, to change the starting weather to be `Heavy Rain` instead of `Scattered Clouds`, it would look like this:
+   For example, to change the starting weather to be `Heavy Rain` instead of `Clear`, it would look like this:
 
    ```ini title="server_cfg.ini"
    [WEATHER_0]
-   GRAPHICS=sol_03_scattered_clouds_type=8_time=0_mult=0
+   GRAPHICS=3_clear_type=8_time=0_mult=0
    ...
    ```
 
@@ -366,6 +485,7 @@ Two of the more useful options for Freeroam servers are listed below.
 For teleportation and color changing there are additional steps for us.
 
 1. Navigate to the `cfg` folder and open the `entry_list.ini`.
+
 2. Each car has a `SKIN=` line that needs to be edited to allow that car to use these features.  
    The following codes need to be added to the skin line:
 
@@ -382,7 +502,7 @@ For teleportation and color changing there are additional steps for us.
    ```ini title="entry_list.ini"
    [CAR_0]
    MODEL=ruf_yellowbird
-   SKIN=00_yellowbird_black/ADAn
+   SKIN=03_black/ADAn
    ```
 
    If we wanted to also allow our AI cars to spawn in different colors, we would have to at least add `/ABAH` to each of the car's skin lines since we don't care about teleportation for them.
@@ -430,6 +550,7 @@ When editing plugin configurations, be careful to keep the format from the docum
 #### AutoModerationPlugin
 
 1. Navigate to the `cfg` folder of the server and open the `extra_cfg.yml`.
+
 2. Find `EnablePlugins:` and enable the plugin like so:
    ```yaml title="extra_cfg.yml"
    # List of plugins to enable
@@ -499,6 +620,7 @@ When editing plugin configurations, be careful to keep the format from the docum
 #### RandomWeatherPlugin
 
 1. Navigate to the `cfg` folder of the server and open the `extra_cfg.yml`.
+
 2. Find `EnablePlugins:` and enable the plugin like so:
    ```yaml title="extra_cfg.yml"
    # List of plugins to enable
@@ -564,7 +686,7 @@ If you did everything correctly you will see two new lines at the beginning of t
 
 This covers how to enable and configure plugins.  
 
-### Troubleshooting Basics {#troubleshooting}
+## Troubleshooting Basics {#troubleshooting}
 
 If at some point something goes wrong and the server no longer starts properly, there a few way to figure out what went wrong and how to fix it.
 We will be looking at one of the more common reasons for a server crash in this example but learning what to look for can help you figure out how to fix any problem.
@@ -628,11 +750,16 @@ But looking closer, we can see that we made a typo when enabling `HighPingKick`,
 
 In general, it is recommended to start fresh instead of simply overwriting files when updating AssettoServer.  
 
-1. Backup your current server files and download the [latest release](./thebeginnersguide.md#latest-assettoserver-version). (or the version you want to update to)
-2. Create a new folder for the updated server and extract the new AssettoServer files as explained [back in this section](./thebeginnersguide.md#server-extraction).
+1. Backup your current server files and download the [latest release](#latest-assettoserver-version). (or the version you want to update to)
+
+2. Create a new folder for the updated server and extract the new AssettoServer files as explained [back in this section](#server-extraction).
+
 3. From your old server, only copy and re-use files that are not `extra_cfg.yml` or `plugin_<plugin_name>_config.yml`.
+
 4. Run the updated `AssettoServer.exe` once to generate a updated `extra_cfg.yml`.
+
 5. Use the backup of your old `extra_cfg.yml` to reconfigure the `extra_cfg.yml` of the updated server.
+
 6. If you had any plugins enabled, restart the updated server once to generate new plugin config files and then reconfigure them.
 
 :::note
