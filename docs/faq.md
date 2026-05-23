@@ -748,7 +748,7 @@ Instead of hosting the script externally, you can use AssettoServer's HTTP serve
 </TabItem>
 </Tabs> 
 
-[There are more options available here.](https://github.com/CheesyManiac/cheesy-lua/wiki/Extra-CSP-Server-Config-Values#server-scripts)
+[There are more options available here.](https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki/Misc-%E2%80%93-Server-extra-options#online-scripts)
 
 ## How do I allow players to download missing content? {#download-missing-content}
 

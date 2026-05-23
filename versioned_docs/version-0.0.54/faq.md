@@ -745,7 +745,7 @@ You're going to need to host your script in plaintext somewhere publicly accessi
 SCRIPT = "https://pastebin.com/raw/00000000000"    ; Change this to the url of your script
 ```
 
-[There are more options available here.](https://github.com/CheesyManiac/cheesy-lua/wiki/Extra-CSP-Server-Config-Values#server-scripts)
+[There are more options available here.](https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki/Misc-%E2%80%93-Server-extra-options#online-scripts)
 
 ## How do I allow players to download missing content? {#download-missing-content}
 
