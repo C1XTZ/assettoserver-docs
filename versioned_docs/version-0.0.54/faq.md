@@ -763,7 +763,7 @@ Please use the download links the authors of the content you're using provide un
 <TabItem value="content-manager" label="With Content Manager (Full Version)" default>
 
   - Navigate to the `Details` Tab in your Server preset.
-  - In the `Share Mode` tab select "Download URL" and paste the direct download link into the `Download from` field.
+  - In the `Share Mode` field select "Download URL" and paste the direct download link into the `Download from` field.
   - Leave `Version Required` as it is since CM will autofill these for you, then save the preset.
   - A `content.json` file will be created in the `cm_content` folder under the directory of the server. 
   - Click the `Folder` button at the bottom of the preset page, open `extra_cfg.yml` and set `EnableServerDetails` to `true`.  
